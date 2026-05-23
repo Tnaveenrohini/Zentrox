@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO Meta Tags -->
+  <title>Zentrox — Premium Instagram Downloader | HD Quality</title>
+  <meta name="description" content="Download Instagram Reels, Videos, Photos, Stories, Carousels, and Audio in HD quality instantly. Free, fast, and secure." />
+  <meta name="keywords" content="instagram downloader, download reels, instagram video download, stories download, free instagram download" />
+  <meta name="author" content="Zentrox" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Zentrox — Premium Instagram Downloader" />
+  <meta property="og:description" content="Download Instagram content in HD quality. Reels, Videos, Photos, Stories & more." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://zentrox.app" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== LOADING SCREEN ===== -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-hex"></div>
+      <div class="loader-logo">ZENTROX</div>
+      <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+      <div class="loader-text">Initializing Neural Core...</div>
+    </div>
+  </div>
+
+  <!-- ===== ANIMATED BACKGROUND ===== -->
+  <div class="bg-grid"></div>
+  <div class="bg-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+
+  <!-- ===== FLOATING NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <!-- Logo -->
+      <a href="#home" class="nav-logo" onclick="showPage('home')">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">ZENTROX</span>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#" class="nav-link active" onclick="showPage('home')">Home</a></li>
+        <li><a href="#" class="nav-link" onclick="showPage('about')">About</a></li>
+        <li><a href="#" class="nav-link" onclick="showPage('faq')">FAQ</a></li>
+        <li><a href="#" class="nav-link" onclick="showPage('contact')">Contact</a></li>
+        <li><a href="#" class="nav-link" onclick="showPage('privacy')">Privacy</a></li>
+        <li><a href="#" class="nav-link" onclick="showPage('terms')">Terms</a></li>
+      </ul>
+
+      <!-- Share Button -->
+      <button class="btn-share-nav" onclick="showPage('share')">
+        <span class="btn-icon">⇡</span> Share
+      </button>
+
+      <!-- Hamburger -->
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE WRAPPER ===== -->
+  <main id="main-content">
+
+    <!-- ============================================================ -->
+    <!-- HOME PAGE -->
+    <!-- ============================================================ -->
+    <section class="page active" id="page-home">
+
+      <!-- Hero -->
+      <div class="hero">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          <span>AI-Powered Detection Active</span>
+        </div>
+
+        <h1 class="hero-title">
+          <span class="title-line">Download</span>
+          <span class="title-line gradient-text">Instagram</span>
+          <span class="title-line">Content</span>
+        </h1>
+
+        <p class="hero-sub">
+          Reels · Videos · Photos · Stories · Carousels · Audio — all in <strong>HD Quality</strong>
+        </p>
+
+        <!-- ===== MAIN DOWNLOADER CARD ===== -->
+        <div class="downloader-card glass-card">
+          <!-- URL Input Row -->
+          <div class="input-row">
+            <div class="input-wrapper">
+              <span class="input-icon">🔗</span>
+              <input
+                type="url"
+                id="urlInput"
+                placeholder="Paste Instagram URL here..."
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <button class="btn-paste" id="pasteBtn" title="Paste from clipboard">
+                ⧉ Paste
+              </button>
+            </div>
+            <button class="btn-download" id="downloadBtn" onclick="handleDownload()">
+              <span class="btn-glow"></span>
+              <span class="btn-label">⬇ Analyze</span>
+            </button>
+          </div>
+
+          <!-- Detected Type Badge -->
+          <div class="detected-type" id="detectedType" style="display:none;">
+            <span class="detect-icon" id="detectIcon">🎬</span>
+            <span id="detectLabel">Reel Detected</span>
+          </div>
+
+          <!-- Error Message -->
+          <div class="error-msg" id="errorMsg" style="display:none;"></div>
+
+          <!-- Loading Animation -->
+          <div class="processing" id="processing" style="display:none;">
+            <div class="process-ring"></div>
+            <div class="process-text">
+              <span id="processStep">Fetching media data...</span>
+              <div class="process-dots"><span></span><span></span><span></span></div>
+            </div>
+          </div>
+
+          <!-- Preview + Download Result -->
+          <div class="result-panel" id="resultPanel" style="display:none;">
+            <div class="result-preview">
+              <img id="resultThumb" src="" alt="Preview" />
+              <div class="preview-overlay">
+                <span class="preview-play">▶</span>
+              </div>
+            </div>
+            <div class="result-info">
+              <div class="result-title" id="resultTitle">Instagram Content</div>
+              <div class="result-meta" id="resultMeta">HD · Ready to Download</div>
+
+              <!-- Quality Options -->
+              <div class="quality-options">
+                <button class="btn-quality active" data-q="hd">HD 1080p</button>
+                <button class="btn-quality" data-q="sd">SD 720p</button>
+                <button class="btn-quality" data-q="audio">Audio Only</button>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="result-actions">
+                <button class="btn-dl-main" id="dlMainBtn">⬇ Download Now</button>
+                <button class="btn-copy-link" id="copyLinkBtn" onclick="copyLink()">⧉ Copy Link</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Supported Types -->
+        <div class="supported-types">
+          <div class="type-chip">🎬 Reels</div>
+          <div class="type-chip">📹 Videos</div>
+          <div class="type-chip">🖼 Photos</div>
+          <div class="type-chip">📖 Stories</div>
+          <div class="type-chip">🎠 Carousels</div>
+          <div class="type-chip">🎵 Audio</div>
+        </div>
+      </div>
+
+      <!-- Features Section -->
+      <section class="features-section">
+        <div class="section-header">
+          <h2 class="section-title">Why <span class="gradient-text">Zentrox?</span></h2>
+          <p class="section-sub">Built with next-gen neural processing for instant, secure downloads</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card glass-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Lightning Fast</h3>
+            <p>Neural-powered servers process your request in under 2 seconds.</p>
+          </div>
+          <div class="feature-card glass-card">
+            <div class="feature-icon">🔒</div>
+            <h3>Zero Storage</h3>
+            <p>We never store your links, data, or downloads. Privacy first.</p>
+          </div>
+          <div class="feature-card glass-card">
+            <div class="feature-icon">🎯</div>
+            <h3>Auto Detection</h3>
+            <p>Paste any Instagram URL — our AI identifies the content type instantly.</p>
+          </div>
+          <div class="feature-card glass-card">
+            <div class="feature-icon">🌐</div>
+            <h3>HD Quality</h3>
+            <p>Download in original quality up to 1080p. No compression, no loss.</p>
+          </div>
+          <div class="feature-card glass-card">
+            <div class="feature-icon">📱</div>
+            <h3>All Devices</h3>
+            <p>Works flawlessly on phones, tablets, and desktops.</p>
+          </div>
+          <div class="feature-card glass-card">
+            <div class="feature-icon">∞</div>
+            <h3>Unlimited</h3>
+            <p>No daily limits, no sign-up, no hidden fees. Completely free.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent Downloads Section -->
+      <section class="recent-section">
+        <div class="section-header">
+          <h2 class="section-title">Recent <span class="gradient-text">Downloads</span></h2>
+          <div class="live-dot"><span></span> Live Feed</div>
+        </div>
+        <div class="recent-list" id="recentList">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Stats Bar -->
+      <section class="stats-bar glass-card">
+        <div class="stat">
+          <div class="stat-num" data-target="12400000">0</div>
+          <div class="stat-label">Downloads Served</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-num" data-target="99">0</div>
+          <div class="stat-label">% Uptime</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-num" data-target="180">0</div>
+          <div class="stat-label">Countries Served</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-num" data-target="2">0</div>
+          <div class="stat-label">Sec Avg. Speed</div>
+        </div>
+      </section>
+
+    </section><!-- /page-home -->
+
+
+    <!-- ============================================================ -->
+    <!-- ABOUT PAGE -->
+    <!-- ============================================================ -->
+    <section class="page" id="page-about">
+      <div class="page-hero">
+        <div class="page-tag">◈ About Zentrox</div>
+        <h1 class="page-title gradient-text">The Future of<br/>Content Freedom</h1>
+        <p class="page-desc">We built Zentrox because downloading Instagram content shouldn't require a PhD. It should be instant, clean, and free — for everyone.</p>
+      </div>
+
+      <div class="content-grid">
+        <div class="glass-card content-card">
+          <div class="card-icon">🛰</div>
+          <h3>Our Mission</h3>
+          <p>Zentrox exists to give every creator and consumer instant access to their own content. Instagram doesn't make it easy to save your memories — we do.</p>
+        </div>
+        <div class="glass-card content-card">
+          <div class="card-icon">🧬</div>
+          <h3>Our Tech</h3>
+          <p>We use a lightweight Node.js/Express backend with intelligent URL parsing to detect and fetch content securely with zero data retention.</p>
+        </div>
+        <div class="glass-card content-card">
+          <div class="card-icon">🌍</div>
+          <h3>Our Promise</h3>
+          <p>Free forever. No ads. No tracking. No email required. We believe digital freedom is a right, not a premium feature.</p>
+        </div>
+      </div>
+
+      <div class="glass-card about-story">
+        <h2>The <span class="gradient-text">Story</span></h2>
+        <p>Zentrox started as a side project in 2024 — a simple tool for a creator who kept losing access to their own Reels after account changes. That frustration became fuel for something bigger.</p>
+        <p>Today, Zentrox serves millions of users across 180 countries, powered by a lean architecture that prioritizes speed, privacy, and simplicity above all else.</p>
+        <p>We're not a massive corporation. We're a small, passionate team that believes the best tools get out of your way and just work.</p>
+      </div>
+    </section>
+
+
+    <!-- ============================================================ -->
+    <!-- FAQ PAGE -->
+    <!-- ============================================================ -->
+    <section class="page" id="page-faq">
+      <div class="page-hero">
+        <div class="page-tag">◈ FAQ</div>
+        <h1 class="page-title gradient-text">Questions &<br/>Answers</h1>
+      </div>
+
+      <div class="faq-list">
+
+        <div class="faq-item glass-card">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Is Zentrox free to use?</span>
+            <span class="faq-arrow">›</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes, 100% free. No account required. No hidden charges. No daily limits. We're supported by the community and committed to keeping it free forever.</p>
+          </div>
+        </div>
+
+        <div class="faq-item glass-card">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>What types of Instagram content can I download?</span>
+            <span class="faq-arrow">›</span>
+          </button>
+          <div class="faq-answer">
+            <p>Zentrox supports Reels, Videos, Photos, Stories, Carousel posts (multiple images/videos), and Audio extraction from any Instagram content.</p>
+          </div>
+        </div>
+
+        <div class="faq-item glass-card">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Do you store my data or downloads?</span>
+            <span class="faq-arrow">›</span>
+          </button>
+          <div class="faq-answer">
+            <p>Never. We don't store URLs, media files, or any personal information. Every request is processed in real-time and discarded immediately after delivery.</p>
+          </div>
+        </div>
+
+        <div class="faq-item glass-card">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Can I download private Instagram content?</span>
+            <span class="faq-arrow">›</span>
+          </button>
+          <div class="faq-answer">
+            <p>No. Zentrox only works with publicly accessible Instagram content. We respect user privacy and won't bypass Instagram's privacy controls.</p>
+          </div>
+        </div>
+
+        <div class="faq-item glass-card">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>What quality will my downloads be in?</span>
+            <span class="faq-arrow">›</span>
+          </button>
+          <div class="faq-answer">
+            <p>We fetch the highest available quality directly from Instagram's servers — up to 1080p HD for videos. Photos are downloaded in their original resolution.</p>
+          </div>
+        </div>
+
+        <div class="faq-item glass-card">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Is it legal to download Instagram content?</span>
+            <span class="faq-arrow">›</span>
+          </button>
+          <div class="faq-answer">
+            <p>Downloading content for personal use is generally acceptable. However, redistributing, reselling, or claiming ownership of others' content is a copyright violation. Always respect creators' rights.</p>
+          </div>
+        </div>
+
+        <div class="faq-item glass-card">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Why isn't my Instagram link working?</span>
+            <span class="faq-arrow">›</span>
+          </button>
+          <div class="faq-answer">
+            <p>Make sure the post is public and the URL is complete (copied from Instagram's share menu). Shortened or app-deep-links may not work — use the full web URL.</p>
+          </div>
+        </div>
+
+        <div class="faq-item glass-card">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Does Zentrox work on mobile?</span>
+            <span class="faq-arrow">›</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes! Zentrox is fully mobile-responsive and works on all modern browsers on iOS and Android. No app installation needed.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ============================================================ -->
+    <!-- CONTACT PAGE -->
+    <!-- ============================================================ -->
+    <section class="page" id="page-contact">
+      <div class="page-hero">
+        <div class="page-tag">◈ Contact</div>
+        <h1 class="page-title gradient-text">Get In Touch</h1>
+        <p class="page-desc">Have a question, issue, or partnership request? We respond within 24 hours.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="glass-card contact-card">
+            <div class="contact-icon">📧</div>
+            <h3>Email</h3>
+            <p>support@zentrox.app</p>
+          </div>
+          <div class="glass-card contact-card">
+            <div class="contact-icon">🐦</div>
+            <h3>Twitter / X</h3>
+            <p>@zentroxapp</p>
+          </div>
+          <div class="glass-card contact-card">
+            <div class="contact-icon">💬</div>
+            <h3>Response Time</h3>
+            <p>Within 24 hours</p>
+          </div>
+        </div>
+
+        <div class="glass-card contact-form-card">
+          <h2>Send a <span class="gradient-text">Message</span></h2>
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" placeholder="Enter your name..." class="form-input" />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" placeholder="Enter your email..." class="form-input" />
+          </div>
+          <div class="form-group">
+            <label>Subject</label>
+            <select class="form-input">
+              <option>General Question</option>
+              <option>Bug Report</option>
+              <option>Feature Request</option>
+              <option>Partnership</option>
+              <option>Legal Inquiry</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea class="form-input" rows="5" placeholder="Describe your issue or question..."></textarea>
+          </div>
+          <button class="btn-download btn-submit" onclick="submitContact(this)">
+            <span class="btn-glow"></span>
+            <span class="btn-label">⇡ Send Message</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================ -->
+    <!-- PRIVACY PAGE -->
+    <!-- ============================================================ -->
+    <section class="page" id="page-privacy">
+      <div class="page-hero">
+        <div class="page-tag">◈ Privacy Policy</div>
+        <h1 class="page-title gradient-text">Your Privacy<br/>Is Sacred</h1>
+        <p class="page-desc">Last updated: January 2025</p>
+      </div>
+
+      <div class="glass-card legal-card">
+        <h2>1. Information We Collect</h2>
+        <p>Zentrox is designed with a zero-data philosophy. We do not collect, store, or sell personal information. When you submit an Instagram URL, it is processed in real-time and immediately discarded after serving the download link. No logs are retained.</p>
+
+        <h2>2. Cookies</h2>
+        <p>We use no tracking cookies. We may use a single session cookie to maintain basic functionality within your browser session. This cookie expires when you close your browser and contains no personally identifiable information.</p>
+
+        <h2>3. Third-Party Services</h2>
+        <p>Zentrox fetches media directly from Instagram's public CDN on your behalf. We do not share your URL or request data with any third parties beyond what is technically necessary to retrieve the content you requested.</p>
+
+        <h2>4. Analytics</h2>
+        <p>We use anonymous, aggregated analytics (total download counts, error rates) to improve the service. These metrics contain no individual identifiers and cannot be linked back to you.</p>
+
+        <h2>5. Children's Privacy</h2>
+        <p>Zentrox is not directed at children under 13. We do not knowingly collect any information from children.</p>
+
+        <h2>6. Changes to This Policy</h2>
+        <p>We may update this policy periodically. Continued use of Zentrox after changes constitutes acceptance of the updated policy. Major changes will be announced on our website.</p>
+
+        <h2>7. Contact</h2>
+        <p>For privacy-related concerns, contact us at privacy@zentrox.app.</p>
+      </div>
+    </section>
+
+
+    <!-- ============================================================ -->
+    <!-- TERMS PAGE -->
+    <!-- ============================================================ -->
+    <section class="page" id="page-terms">
+      <div class="page-hero">
+        <div class="page-tag">◈ Terms & Conditions</div>
+        <h1 class="page-title gradient-text">Terms of<br/>Service</h1>
+        <p class="page-desc">Last updated: January 2025</p>
+      </div>
+
+      <div class="glass-card legal-card">
+        <h2>1. Acceptance of Terms</h2>
+        <p>By using Zentrox, you agree to these Terms of Service. If you disagree with any part, please discontinue use immediately.</p>
+
+        <h2>2. Permitted Use</h2>
+        <p>Zentrox may only be used for lawful purposes. You may download content for personal, non-commercial use. You agree NOT to use Zentrox to download content you do not have rights to distribute, or to infringe on others' intellectual property.</p>
+
+        <h2>3. Prohibited Activities</h2>
+        <ul>
+          <li>Downloading private content without authorization</li>
+          <li>Using downloads for commercial redistribution without creator permission</li>
+          <li>Automated/bot access to Zentrox services</li>
+          <li>Attempting to circumvent our security or rate limiting</li>
+          <li>Using Zentrox for harassment or harmful purposes</li>
+        </ul>
+
+        <h2>4. Intellectual Property</h2>
+        <p>All Instagram content belongs to its respective creators. Zentrox does not claim ownership of any downloaded content. Users are solely responsible for how they use downloaded media.</p>
+
+        <h2>5. Disclaimer of Warranties</h2>
+        <p>Zentrox is provided "as is" without warranties of any kind. We do not guarantee uninterrupted service, and are not responsible for changes to Instagram's platform that may affect functionality.</p>
+
+        <h2>6. Limitation of Liability</h2>
+        <p>Zentrox and its operators shall not be liable for any damages arising from your use of this service, including but not limited to data loss, service interruption, or third-party claims.</p>
+
+        <h2>7. Governing Law</h2>
+        <p>These terms are governed by applicable international law. Disputes shall be resolved through binding arbitration where permitted.</p>
+      </div>
+    </section>
+
+
+    <!-- ============================================================ -->
+    <!-- SHARE PAGE -->
+    <!-- ============================================================ -->
+    <section class="page" id="page-share">
+      <div class="page-hero">
+        <div class="page-tag">◈ Share Zentrox</div>
+        <h1 class="page-title gradient-text">Spread the<br/>Freedom</h1>
+        <p class="page-desc">Love Zentrox? Share it with your network and help creators everywhere save their content.</p>
+      </div>
+
+      <div class="share-grid">
+        <div class="glass-card share-card" onclick="shareToSocial('twitter')">
+          <div class="share-icon share-twitter">𝕏</div>
+          <h3>Twitter / X</h3>
+          <p>Tweet about Zentrox</p>
+          <div class="share-arrow">→</div>
+        </div>
+        <div class="glass-card share-card" onclick="shareToSocial('whatsapp')">
+          <div class="share-icon share-whatsapp">💬</div>
+          <h3>WhatsApp</h3>
+          <p>Share with friends</p>
+          <div class="share-arrow">→</div>
+        </div>
+        <div class="glass-card share-card" onclick="shareToSocial('telegram')">
+          <div class="share-icon share-telegram">✈</div>
+          <h3>Telegram</h3>
+          <p>Share to channels</p>
+          <div class="share-arrow">→</div>
+        </div>
+        <div class="glass-card share-card" onclick="shareToSocial('reddit')">
+          <div class="share-icon share-reddit">◉</div>
+          <h3>Reddit</h3>
+          <p>Post to communities</p>
+          <div class="share-arrow">→</div>
+        </div>
+      </div>
+
+      <!-- Copy Link -->
+      <div class="glass-card share-copy-card">
+        <h2>Or Copy the <span class="gradient-text">Link</span></h2>
+        <div class="copy-row">
+          <span class="copy-url">https://zentrox.app</span>
+          <button class="btn-copy-link" onclick="copyZentroxLink()">⧉ Copy</button>
+        </div>
+      </div>
+
+      <!-- Native Share -->
+      <button class="btn-download btn-native-share" onclick="nativeShare()">
+        <span class="btn-glow"></span>
+        <span class="btn-label">📤 Share via Device</span>
+      </button>
+    </section>
+
+  </main><!-- /main-content -->
+
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo"><span>⬡</span> ZENTROX</div>
+        <p>The next generation Instagram downloader. Fast, free, and forever.</p>
+        <div class="social-links">
+          <a href="#" class="social-link" title="Twitter">𝕏</a>
+          <a href="#" class="social-link" title="Telegram">✈</a>
+          <a href="#" class="social-link" title="Instagram">◎</a>
+          <a href="#" class="social-link" title="Reddit">◉</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Pages</h4>
+        <a href="#" onclick="showPage('home')">Home</a>
+        <a href="#" onclick="showPage('about')">About Us</a>
+        <a href="#" onclick="showPage('faq')">FAQ</a>
+        <a href="#" onclick="showPage('contact')">Contact</a>
+      </div>
+      <div class="footer-links">
+        <h4>Legal</h4>
+        <a href="#" onclick="showPage('privacy')">Privacy Policy</a>
+        <a href="#" onclick="showPage('terms')">Terms & Conditions</a>
+        <a href="#" onclick="showPage('share')">Share</a>
+      </div>
+      <div class="footer-links">
+        <h4>Supported</h4>
+        <a href="#">Instagram Reels</a>
+        <a href="#">Videos & Photos</a>
+        <a href="#">Stories</a>
+        <a href="#">Carousels & Audio</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Zentrox. All rights reserved. Not affiliated with Instagram or Meta.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
