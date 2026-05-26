@@ -1,13 +1,13 @@
-# nixpacks.toml
-# Tells Railway to install Python + yt-dlp alongside Node.js
+# nixpacks.toml — Railway build config
 
 [phases.setup]
-nixPkgs = ["python311", "ffmpeg"]
+nixPkgs = ["ffmpeg", "curl"]
 
 [phases.install]
 cmds = [
   "npm install",
-  "pip install yt-dlp"
+  "curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp",
+  "chmod a+rx /usr/local/bin/yt-dlp"
 ]
 
 [start]
