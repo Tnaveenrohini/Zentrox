@@ -4,8 +4,8 @@
   "description": "Premium Instagram Downloader — HD Reels, Videos, Photos, Stories & Audio",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "build": "pip install yt-dlp"
+    "build": "curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp",
+    "start": "node server.js"
   },
   "keywords": ["instagram", "downloader", "reels", "video", "express"],
   "author": "Zentrox",
