@@ -1,0 +1,14 @@
+# nixpacks.toml
+# Tells Railway to install Python + yt-dlp alongside Node.js
+
+[phases.setup]
+nixPkgs = ["python311", "ffmpeg"]
+
+[phases.install]
+cmds = [
+  "npm install",
+  "pip install yt-dlp"
+]
+
+[start]
+cmd = "node server.js"
