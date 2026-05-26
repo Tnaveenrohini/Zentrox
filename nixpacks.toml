@@ -1,13 +1,10 @@
 # nixpacks.toml — Railway build config
-
-[phases.setup]
-nixPkgs = ["ffmpeg", "curl"]
+# Python3 + pip3 + ffmpeg are all pre-installed on Railway's Ubuntu image
 
 [phases.install]
 cmds = [
   "npm install",
-  "curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp",
-  "chmod a+rx /usr/local/bin/yt-dlp"
+  "pip3 install -U yt-dlp"
 ]
 
 [start]
