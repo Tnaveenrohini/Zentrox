@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "build": "pip install yt-dlp"
   },
   "keywords": ["instagram", "downloader", "reels", "video", "express"],
   "author": "Zentrox",
