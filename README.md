@@ -1,215 +1,59 @@
-# ⬡ ZENTROX — Premium Instagram Downloader
+# Wave Rise Ringtones
 
-> Download Instagram Reels, Videos, Photos, Stories, Carousels, and Audio in HD quality. Fast, free, and forever.
+A polished mobile-first ringtone discovery experience built as a dependency-light static frontend. Demo audio is synthesized locally in the browser so the repository does not redistribute copyrighted music.
 
-![Version](https://img.shields.io/badge/version-1.0.0-00cfff?style=flat-square)
-![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-9b5de5?style=flat-square)
-![License](https://img.shields.io/badge/license-MIT-06ffa5?style=flat-square)
+## Included
+- Responsive dark premium UI with neon blue/purple visual system
+- 20 fictional, rights-cleared demo records
+- Search by title, artist and category
+- Working browser audio previews and generated MP3-compatible WAV downloads
+- Ringtone detail modal, share/copy link, favorites and theme toggle
+- Category browse cards, trending/new sections and empty states
+- Admin upload/review panel UI with a rights confirmation gate
+- SEO metadata, semantic HTML, canonical URL and copyright workflow copy
 
----
+## Run locally
+This version is static and can be previewed with any static server:
 
-## 📁 Project Structure
-
-```
-zentrox/
-├── index.html      ← All 7 pages (SPA — single file)
-├── style.css       ← Full cyberpunk design system
-├── script.js       ← Frontend logic, animations, API calls
-├── server.js       ← Express backend & download API
-├── package.json    ← Dependencies & scripts
-└── README.md       ← You are here
-```
-
----
-
-## ⚡ Quick Start
-
-**1. Install dependencies**
 ```bash
 npm install
+npm start
 ```
 
-**2. Start the server**
-```bash
-node server.js
+`npm start` serves the existing Express app at `http://localhost:3000`.
+
+## Production architecture
+For a production launch, connect the admin panel to Supabase:
+
+- Supabase Auth with an `admin` role and MFA
+- Postgres `ringtones`, `categories`, `favorites`, `plays`, `downloads`, `rights_documents`, and `dmca_reports` tables
+- Private Supabase Storage bucket for source uploads and signed download URLs
+- Server-side download route that validates the published record and increments downloads
+- RLS policies denying public source-file access and allowing only published, rights-cleared records
+- Virus scanning, MIME/duration validation, rate limits, audit logs, and moderation review
+
+### Suggested schema
+`ringtones(id uuid, slug text unique, title text, artist text, category_id uuid, tags text[], duration_seconds int, audio_path text, thumbnail_path text, rights_type text, rights_reference text, status text, download_count bigint, play_count bigint, seo_title text, seo_description text, created_at timestamptz)`.
+
+## Environment variables for the production API
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+STORAGE_AUDIO_BUCKET=wave-rise-audio
+STORAGE_IMAGE_BUCKET=wave-rise-art
+NEXT_PUBLIC_SITE_URL=https://your-domain.example
+ADMIN_EMAILS=admin@example.com
 ```
 
-**3. Open in browser**
-```
-http://localhost:3000
-```
+## Deployment
+For a static demo, deploy the repository to Vercel with the framework preset set to **Other** and build command empty. For the full production version, migrate the UI to Next.js App Router, place protected route handlers under `app/api/admin` and `app/api/download`, configure the environment variables above in Vercel, and use Supabase migrations/RLS before enabling uploads.
 
-That's it. No build step. No bundler. No config.
+## Adding the first ringtone safely
+1. Authenticate as an admin.
+2. Upload an original, licensed, or public-domain MP3 and artwork.
+3. Attach proof of rights and select **pending review**.
+4. Validate duration, MIME type, loudness, artwork dimensions, and filename server-side.
+5. Approve it only after the rights record is complete; then generate a signed download URL.
 
----
-
-## 🌐 Pages
-
-| Page | Description |
-|---|---|
-| Home | Main downloader with URL input, preview & download |
-| About Us | Mission, tech stack, and origin story |
-| FAQ | Accordion-style answers to common questions |
-| Contact | Contact form + email & social info |
-| Privacy Policy | Zero-data policy explained |
-| Terms & Conditions | Usage rules and legal disclaimers |
-| Share | Social share cards + copy link + native share |
-
----
-
-## 🔌 API Reference
-
-### `POST /api/download`
-Analyzes an Instagram URL and returns media metadata.
-
-**Request**
-```json
-{
-  "url": "https://www.instagram.com/reel/ABC123/"
-}
-```
-
-**Response**
-```json
-{
-  "success": true,
-  "type": "reel",
-  "title": "Instagram Reel",
-  "thumbnail": "https://...",
-  "downloadUrl": "https://...",
-  "duration": "0:32",
-  "quality": "HD 1080p"
-}
-```
-
-**Error Response**
-```json
-{
-  "error": "Invalid URL. Only instagram.com links are supported."
-}
-```
-
----
-
-### `GET /api/health`
-Health check endpoint for uptime monitoring.
-
-```json
-{ "status": "ok", "uptime": "42.3s" }
-```
-
----
-
-## 🔧 Adding Real Download Support
-
-The `/api/download` endpoint currently returns demo data. To enable real downloads, replace the placeholder block in `server.js` with one of these approaches:
-
-**Option A — yt-dlp (recommended, must be installed on server)**
-```js
-const { execFile } = require('child_process');
-
-execFile('yt-dlp', [
-  '--get-url',
-  '--get-title',
-  '--get-thumbnail',
-  url
-], (err, stdout) => {
-  if (err) return res.status(500).json({ error: 'Could not fetch media.' });
-  const [title, downloadUrl, thumbnail] = stdout.trim().split('\n');
-  return res.json({ success: true, type, title, downloadUrl, thumbnail });
-});
-```
-
-**Option B — Third-party API**
-```js
-const response = await fetch(`https://your-api.com/instagram?url=${encodeURIComponent(url)}`);
-const data = await response.json();
-return res.json({ success: true, ...data });
-```
-
----
-
-## 🎨 Design System
-
-| Token | Value |
-|---|---|
-| Primary font | Orbitron (display/headings) |
-| Body font | Rajdhani |
-| Mono font | Share Tech Mono |
-| Neon Blue | `#00cfff` |
-| Neon Purple | `#9b5de5` |
-| Neon Pink | `#f72585` |
-| Neon Cyan | `#00f5d4` |
-| Background | `#000005` |
-| Glass border | `rgba(0,207,255,0.2)` |
-
-All tokens are defined as CSS variables in `:root` inside `style.css`.
-
----
-
-## 🚀 Deployment
-
-### Render
-1. Push the project to a GitHub repository
-2. Go to [render.com](https://render.com) → New → Web Service
-3. Connect your repo
-4. Set **Start Command** to `node server.js`
-5. Set **Environment** to `Node`
-6. Deploy — done
-
-### Vercel
-1. Install Vercel CLI: `npm i -g vercel`
-2. Run `vercel` in the project folder
-3. Follow the prompts
-
-> Vercel runs `server.js` as a serverless function. The `module.exports = app` line at the bottom of `server.js` handles this automatically.
-
-### Environment Variables (optional)
-```
-PORT=3000          # Default: 3000
-```
-
----
-
-## 📱 Features Checklist
-
-- [x] Paste URL input with clipboard support
-- [x] Auto content-type detection (Reel, Story, Photo, Video, Carousel)
-- [x] Multi-step processing animation
-- [x] Preview thumbnail before download
-- [x] Quality selector (HD 1080p / SD 720p / Audio Only)
-- [x] Download button + Copy Link button
-- [x] Live Recent Downloads feed
-- [x] Animated stats counter
-- [x] FAQ accordion
-- [x] Contact form
-- [x] Social share (Twitter, WhatsApp, Telegram, Reddit)
-- [x] Native device share (Web Share API)
-- [x] Floating glassmorphism navbar
-- [x] Futuristic loading screen
-- [x] Animated background (grid + orbs)
-- [x] Button ripple + glow effects
-- [x] Toast notifications
-- [x] Mobile responsive
-- [x] SEO meta tags & Open Graph
-- [x] Security headers (no extra library)
-- [x] Health check endpoint
-
----
-
-## 🛡 Security Notes
-
-- All API requests are validated server-side before processing
-- Only `instagram.com` URLs are accepted
-- No user data, URLs, or downloads are stored or logged
-- Security headers (`X-Frame-Options`, `X-XSS-Protection`, etc.) are set on every response without any external library
-
----
-
-## 📄 License
-
-MIT — free to use, modify, and deploy.
-
----
-
-> Built with Node.js · Express · Vanilla JS · Zero unnecessary dependencies
+Never scrape or upload commercial movie/music audio without explicit permission.
